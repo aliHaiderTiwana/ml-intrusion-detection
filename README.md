@@ -1,6 +1,6 @@
 # 🛡️ AI-Powered Autonomous Cyber Defense System
 
-**Author:** Ali Haider  
+**Author:** Ali Haider || Abdullah 
 **Course:** CSC-361 Machine Learning | Spring 2025  
 **Track:** Track B - Software-Based AI System  
 **Instructor:** Dr. Shafiq Ur Rehman Khan  
