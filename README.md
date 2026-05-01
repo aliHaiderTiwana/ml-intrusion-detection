@@ -1,40 +1,42 @@
-# 🛡️ AI-Powered Autonomous Cyber Defense System
+# Autonomous AI Intrusion Prevention System (IPS) 🛡️
 
-**Author:** Ali Haider || Abdullah 
-**Course:** CSC-361 Machine Learning | Spring 2025  
-**Track:** Track B - Software-Based AI System  
-**Instructor:** Dr. Shafiq Ur Rehman Khan  
+## Overview
+This project is a real-time, Artificial Intelligence-driven Intrusion Prevention System (IPS). It actively monitors local network traffic, uses a Machine Learning model to classify packets as "Normal" or "Attack," and automatically updates the Linux firewall to block malicious IP addresses in milliseconds. It includes a live Security Operations Center (SOC) dashboard for real-time monitoring.
 
----
+**Lead Architect:** Ali Haider Abdullah
 
-## 📌 1. Problem Definition & Target Audience
-Traditional rule-based security firewalls are slow, reactive, and incapable of detecting "Zero-Day" attacks or complex behavioral anomalies. This project builds an **Intrusion Detection and Prevention System (IDPS)** that utilizes Machine Learning to analyze network traffic in real-time, instantly distinguishing between legitimate user activity and malicious attacks.
+## Key Features
+* **Real-Time Packet Sniffing:** Bypasses standard OS rules to read raw network packets directly from the network interface card using `scapy`.
+* **AI-Powered Analysis:** Utilizes a trained Random Forest model to analyze packet features (size, time-to-live) and classify threats instantly.
+* **Autonomous Defense:** Automatically executes root-level `iptables` commands to drop connections from identified threat IPs.
+* **Live SOC Dashboard:** A dark-mode, real-time web interface built with React and Tailwind CSS that receives live updates via WebSockets.
+* **Local Logging:** All traffic and threat events are securely logged into a local SQLite database for future analysis.
 
-**Target Audience:**
-* **Small to Medium Enterprises (SMEs):** Organizations lacking the budget for a 24/7 manual Security Operations Center (SOC).
-* **Cloud Service Providers:** To provide an automated layer of defense for hosted virtual machines.
-* **IoT Network Administrators:** Securing networks of vulnerable smart devices against botnets.
+## Technology Stack
+* **Backend:** Python, FastAPI, WebSockets, SQLite
+* **Machine Learning:** scikit-learn, Pandas, Joblib (Random Forest Classifier)
+* **Network Manipulation:** Scapy, Linux `iptables`
+* **Frontend:** React, Vite, Tailwind CSS
 
----
+## How It Works
+1. **The Senses:** `sniffer.py` listens to the network interface and extracts key features from incoming IP packets.
+2. **The Brain:** The packet data is sent to the FastAPI server, where the AI model evaluates it against trained threat patterns.
+3. **The Muscle:** If an attack is detected, the API signals the sniffer to block the source IP using the Ubuntu firewall.
+4. **The Interface:** The API simultaneously broadcasts the event over a WebSocket to the React dashboard, updating the UI in real-time.
 
-## 🏗️ 2. System Architecture
-The system follows a continuous pipeline from data capture to autonomous response.
+## Installation & Setup
 
-```mermaid
-graph TD
-    A[Live Network Interface / UNSW-NB15] -->|Raw Packets| B(Data Preprocessing Layer)
-    B -->|Encoding & Scaling| C{Feature Engineering}
-    C -->|Top Features| D[Supervised ML Engine]
-    
-    subgraph Detection Engine
-    D -->|Classification| E{Traffic Analysis}
-    end
-    
-    E -- Attack Detected --> F[Generate Alert]
-    E -- Normal Traffic --> G[Allow Connection]
-    
-    subgraph Autonomous Response
-    F --> H[Trigger Python Response Script]
-    H --> I((Block IP via Linux iptables))
-    end
+### Prerequisites
+* Linux OS (Ubuntu recommended due to `iptables` dependency)
+* Python 3.8+
+* Node.js v22+
 
+### 1. Start the AI Backend
+Open your first terminal and run:
+```bash
+# Activate your virtual environment
+source venv/bin/activate
+
+# Install requirements (ensure FastAPI, Uvicorn, Scikit-Learn, Pandas are installed)
+# Start the API server
+uvicorn api:app --reload
