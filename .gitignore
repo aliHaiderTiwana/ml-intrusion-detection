@@ -8,3 +8,6 @@ soc-dashboard/node_modules/
 
 # Ignore Database Logs (so you upload a fresh, empty system)
 security_logs.db
+venv/
+soc-dashboard/node_modules/
+*.pkl
